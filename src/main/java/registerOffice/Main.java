@@ -43,7 +43,7 @@ public class Main {
 		Boat drago = new MotorBoat("Drago","MB3400",600);
 		
 		//dodawanie Jachtów
-		Boat gold = new SailingBoat("Goldwasser","SB9000",2012);
+		Boat gold = new SailingBoat("Goldwasser","SB9000",8);
 		
 		//przypisanie klientow do łódek
 		thunder.setOwner(seba);
