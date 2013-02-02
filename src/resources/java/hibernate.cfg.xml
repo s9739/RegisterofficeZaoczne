@@ -7,25 +7,27 @@
     <session-factory>
     <!-- Polaczenie do DB -->
     <property name="connection.driver_class">
-    	org.hsqldb.ClientConnection
-    </property>
-    
-    <property name="connection.url">
-    	jdbc:hsqldb:hsql://localhost/workdb
+        org.hsqldb.ClientConnection
     </property>
    
+    <property name="connection.url">
+        jdbc:hsqldb:hsql://localhost/workdb
+    </property>
+  
     <!-- connection pool -->
 
     <property name="connection.pool">1</property>
-   
+  
     <property name="dialect">org.hibernate.dialect.HSQLDialect</property>
-   
+  
     <property name="show_sql">false</property>
-   
+  
     <property name="hbm2ddl.auto">create</property>
-    
-    <mapping class="registerOffice.businessObjects.persons.Person" />
-    <mapping class="registerOffice.businessObjects.cars.PersonCar"/>
-    
+   
+    <mapping class="registerOffice.businessObjects.customers.Customer" />
+    <mapping class="registerOffice.businessObjects.boats.FastBoat"/>
+    <mapping class="registerOffice.businessObjects.boats.MotorBoat"/>
+    <mapping class="registerOffice.businessObjects.boats.SailingBoat"/>
+    <mapping class="registerOffice.businessObjects.boats.Boat"/>
     </session-factory>
 </hibernate-configuration>

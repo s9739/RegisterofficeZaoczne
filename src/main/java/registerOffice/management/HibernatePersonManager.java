@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.hibernate.Session;
 
-import registerOffice.businessObjects.persons.Person;
+import registerOffice.businessObjects.customers.Customer;
 
 public class HibernatePersonManager 
-	implements ManagerInterface<Person>{
+	implements ManagerInterface<Customer>{
 
 	Session session;
 	
@@ -17,32 +17,34 @@ public class HibernatePersonManager
 	}
 	
 	@Override
-	public Person get(int id) {
+	public Customer get(int id) {
 		
-		List<Person> result = 
-				session.getNamedQuery("Person.id")
+		List<Customer> result = 
+				session.getNamedQuery("customer.id")
 					.setInteger("id", id).list();
 		if(result.size()==0)
 			return null;
 		
-		Person returnValue = new Person(
+		Customer returnValue = new Customer(
+				result.get(0).getFirstname(), 
 				result.get(0).getName(), 
 				result.get(0).getPesel(),
-				result.get(0).getAddress());
+				result.get(0).getAddress(),
+				result.get(0).getCity());
 		returnValue.setId(result.get(0).getId());
 		return returnValue;
 	}
 
 	@Override
-	public List<Person> getAll() {
-		List<Person> result =
-				session.getNamedQuery("Person.all")
+	public List<Customer> getAll() {
+		List<Customer> result =
+				session.getNamedQuery("Customer.all")
 				.list();
 		return result;
 	}
 
 	@Override
-	public boolean save(Person obj) {
+	public boolean save(Customer obj) {
 		
 		try{
 			session.beginTransaction();
@@ -55,12 +57,12 @@ public class HibernatePersonManager
 	}
 
 	@Override
-	public boolean delete(Person obj) {
+	public boolean delete(Customer obj) {
 		
 		try
 		{
 			session.beginTransaction();
-			session.getNamedQuery("Person.delete")
+			session.getNamedQuery("Customer.delete")
 			.setInteger("id", obj.getId())
 			.executeUpdate();
 			

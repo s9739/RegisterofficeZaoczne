@@ -1,92 +1,74 @@
 package registerOffice;
 
-import java.sql.SQLPermission;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import registerOffice.businessObjects.cars.Car;
-import registerOffice.businessObjects.cars.PersonCar;
-import registerOffice.businessObjects.cars.TruckCar;
-import registerOffice.businessObjects.persons.*;
+import registerOffice.businessObjects.boats.MotorBoat;
+import registerOffice.businessObjects.boats.Boat;
+import registerOffice.businessObjects.boats.SailingBoat;
+import registerOffice.businessObjects.boats.FastBoat;
+import registerOffice.businessObjects.customers.*;
 import registerOffice.management.*;
-import registerOffice.management.conditions.Condition;
-import registerOffice.management.conditions.GetByAddressCondition;
-import registerOffice.management.conditions.GetByNameCondition;
+//biblioteki nieimplementowane
+//import java.sql.SQLPermission;
+//import java.util.ArrayList;
+//import java.util.LinkedList;
+//import registerOffice.management.conditions.Condition;
+//import registerOffice.management.conditions.GetByAddressCondition;
+//import registerOffice.management.conditions.GetByNameCondition;
 
 public class Main {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		
 		SessionFactory factory = new Configuration().configure().buildSessionFactory();
 		
 		Session session = factory.openSession();
 		
-		ManagerInterface<Person> hib= 
+		ManagerInterface<Customer> hib= 
 				new HibernatePersonManager(session);
-				
+
+		//tworzenie czytelnikow
+		Customer seba = new Customer("Sebastian","Zarski", "80032923431", "Piastowska 96","Gdansk");
+		Customer marta = new Customer("Marta","Rode", "83112298743", "3 Maja","Wejherowo");
+		Customer michal = new Customer("Michal","Toborek", "82043298767", "Gdanska 70","Rumia");
+
+		//dodawanie szybkich łodzi motorowych
+		Boat thunder = new FastBoat("Black Thunder","FS5000");
+		Boat speed = new FastBoat("Red Speed","FS4000");
 		
-		Person adam = new Person("Adam", "1234", "Brzegi 55");
-		Car alfa = new PersonCar("Alfa Romeo","gda1234");
-		Car peugeot = new PersonCar("Pegeot","gda5678");
-		alfa.setOwner(adam);
-		peugeot.setOwner(adam);
-		adam.getCars().add(alfa);
-		adam.getCars().add(peugeot);
+		//dodawanie dużych łodzi motorowych
+		Boat drago = new MotorBoat("Drago","MB3400",600);
 		
-		hib.save(adam);
+		//dodawanie Jachtów
+		Boat gold = new SailingBoat("Goldwasser","SB9000",2012);
 		
-		List<Person>results = hib.getAll();
+		//przypisanie klientow do łódek
+		thunder.setOwner(seba);
+		speed.setOwner(marta);
+		drago.setOwner(michal);
+		gold.setOwner(michal);
 		
-		for(Person p :results)
+		//przypisanie ksiazek do czytelnikow
+		seba.getBoat().add(thunder);
+		marta.getBoat().add(speed);
+		michal.getBoat().add(drago);
+		michal.getBoat().add(gold);
+		
+		//uzycie hibernate do zapisania danych w tabelach
+		hib.save(seba);
+		hib.save(marta);
+		hib.save(michal);
+		
+		List<Customer>results = hib.getAll();
+		
+		for(Customer p :results)
 		{
 			System.out.println(p.getName());
 		}
-		
-		
-		
-//		ManagerInterface<Person> mgr= new HsqlPersonManager();
-//		
-////		ManagerInterface<Person> mgr= new PersonManager();
-////		
-//		mgr.save(new Person("Adam","1234","Gdańsk"));
-//		mgr.save(new Person("Paweł","12345","Elbląg"));
-//		mgr.save(new Person("Michał","12344","Gdańsk"));
-//		mgr.save(new Person("Ola","1234534","Gdynia"));
-//		mgr.save(new Person("Ania","1236544","Sopot"));
-//		mgr.save(new Person("Adam","12342","Sopot"));
-//		mgr.save(new Person("Adam","12344","Gdańsk"));
-//		mgr.save(new Person("Adam","12354","Gdynia"));
-////		
-//		for(Person p: mgr.getAll())
-//			System.out.println(p.getName());
-//		
-//		Condition<Person> byname=new GetByNameCondition("Adam");
-//		Condition<Person> byaddress=new GetByAddressCondition("Sopot");
-//		Condition<Person> mainCondition=new Condition<Person>()
-//				{
-//					@Override
-//					protected boolean check(Person obj) {
-//						return true;
-//					}};
-//		
-//		byname.setCondition(byaddress);
-//		mainCondition.setCondition(byname);
-//		for(Person p:mgr.getAll(mainCondition))
-//		{
-//			System.out.println(p.getName()
-//					+" "
-//					+p.getAddress()
-//					+" "+ p.getPesel());
-//		}
-//		
+			
 	}
 
 }
